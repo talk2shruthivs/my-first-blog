@@ -25,7 +25,7 @@ SECRET_KEY = '))iu7n9rdacgosno%wn$0i-s%%5-(g62&c!feqpd&5qg@h-g!k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'shruthivs.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'vsshruthi.pythonanywhere.com']
 
 
 # Application definition
