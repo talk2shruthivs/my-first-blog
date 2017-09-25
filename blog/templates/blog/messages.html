@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div class="conversation-list" style="float:left" height="75%" width="300px" >
+
+  <strong>Messages</strong>
+  <a href="{% url 'new_message' %}"><p target="blog/new_message.html" style="float:right" > Message a contact </p></a>
+  <br/>
+
+  <ul>
+  {% for contact in contacts %}
+    {% csrf_token %}
+    <li><a href="{% url 'message_details' pk=contact.pk %}" target="message-details">{{ contact }}</a></li>
+    <br/>
+  {% endfor %}
+  <ul>
+
+</div>
+
+<div style="float:right">
+<iframe src="" name="message-details" height="75%" width="500px" class="message-details" style="float:right"></iframe>
+</div>
+{% endblock %}

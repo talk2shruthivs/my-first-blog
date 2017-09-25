@@ -1,0 +1,11 @@
+{% load staticfiles %}
+<html>
+  <body>
+      {% for message in conversation %}
+
+        <p>{{message.sender.username}} : {{ message.content }}</p>
+        </br>
+
+      {% endfor %}
+  </body>
+</html>

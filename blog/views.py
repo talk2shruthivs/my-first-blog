@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, MessageForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
+from directmessages.apps import Inbox
+from directmessages.models import Message
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -25,7 +27,7 @@ def post_new(request):
             post.author = request.user
             #post.published_date = timezone.now()
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('blog/post_detail', pk=post.pk)
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
@@ -40,7 +42,7 @@ def post_edit(request, pk):
             post.author = request.user
             #post.published_date = timezone.now()
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('blog/post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
@@ -100,3 +102,24 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+def messages(request):
+    contacts = Inbox.get_conversations(request.user)
+    return render(request, 'blog/messages.html', {'contacts': contacts})
+
+def new_message(request):
+    #msg = get_object_or_404(Message)
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            msg = form.save(commit = False)
+            msg.sender = request.user
+            Inbox.send_message(msg.sender, msg.recipient, msg.content)
+            return redirect('messages')
+    else:
+        form = MessageForm()
+    return render(request, 'blog/new_message.html', {'form':form})
+
+def message_details(request, pk):
+    conversation = Inbox.get_conversation(request.user, pk)
+    return render(request, 'blog/message_details.html', {'conversation' : conversation, 'pk':pk})

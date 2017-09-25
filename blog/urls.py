@@ -14,4 +14,7 @@ urlpatterns = [
     url(r'^comment/(?P<pk>\d+)/approve/$', views.comment_approve, name='comment_approve'),
     url(r'^comment/(?P<pk>\d+)/remove/$', views.comment_remove, name='comment_remove'),
     url(r'^accounts/signup/$', views.signup, name='signup'),
+    url(r'^messages/$', views.messages, name='messages'),
+    url(r'^messages/newmessage/$', views.new_message, name='new_message'),
+    url(r'^messages/(?P<pk>\d+)/$', views.message_details, name='message_details')
 ]
